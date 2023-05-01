@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<!--    <style>-->
+<!--        * {-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--        }-->
+<!--        body {-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            background-color: bisque;-->
+<!--            font-family: "Courier New",sans-serif;-->
+<!--            font-size: 18px;-->
+<!--        }-->
+<!--        header {-->
+<!--            width: 100%;-->
+<!--            background-color: white;-->
+<!--            height: 80px;-->
+
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--        }-->
+<!--        .header-section {-->
+<!--            width: 70%;-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--        }-->
+<!--        nav {-->
+<!--            display: flex;-->
+<!--        }-->
+<!--        .list__item {-->
+<!--            list-style: none;-->
+<!--        }-->
+<!--        .navi__link {-->
+<!--            font-family: sans-serif;-->
+<!--            font-size: 22px;-->
+<!--            font-weight: bold;-->
+<!--            text-decoration: none;-->
+<!--            color: #085db2;-->
+
+<!--            margin-right: 45px;-->
+
+<!--            border-bottom: 2px solid rgba(0, 0, 0, 0.00);-->
+<!--            transition: .2s ease-in-out;-->
+<!--        }-->
+<!--        .navi__link:hover {-->
+<!--            border-bottom: 2px solid #f8d38e;-->
+<!--        }-->
+<!--        .welcome {-->
+<!--            align-self: center;-->
+<!--            margin-top: 50px;-->
+<!--            margin-left: 900px;-->
+<!--            display: flex;-->
+<!--            font-size: 30px;-->
+<!--        }-->
+<!--        .info {-->
+<!--            margin-top: 150px;-->
+<!--            margin-bottom: 50px;-->
+<!--        }-->
+<!--        .title {-->
+<!--            text-transform: uppercase;-->
+<!--            text-align: center;-->
+<!--            margin-bottom: 18px;-->
+<!--        }-->
+<!--        .description {-->
+<!--            margin-bottom: 12px;-->
+<!--        }-->
+<!--        span {-->
+<!--            font-weight: bold;-->
+<!--            color: #69a82c;-->
+<!--        }-->
+<!--        .buttons {-->
+<!--            margin-bottom: 50px;-->
+<!--        }-->
+<!--        .link {-->
+<!--            display: block;-->
+<!--            width: 350px;-->
+<!--            padding: 10px 22px;-->
+<!--            border:none;-->
+<!--            border-radius: 3px;-->
+
+<!--            background-color: rgba(152, 204, 98, 0.93);-->
+<!--            color: #fff;-->
+<!--            text-decoration: none;-->
+<!--            font-weight: bold;-->
+<!--            text-transform: uppercase;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        .link:hover {-->
+<!--            background-color: #69a82c;-->
+<!--        }-->
+<!--        .logout__link {-->
+<!--            background-color: #fc6161;-->
+<!--            width: 100%;-->
+<!--            font-family: inherit;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .logout__link:hover {-->
+<!--            background-color: #ff3c3c;-->
+<!--        }-->
+<!--    </style>-->
+    <title>Main page</title>
+</head>
+<body>
+    <header>
+        <section class="container">
+            <div class="logo">
+                <a href="https://platform.kata.academy/user/statistic" target="_blank"><img src="https://platform.kata.academy/images/header-logo.svg" alt="kata-logo"></a>
+            </div>
+            <div class="navigation">
+                <nav>
+                    <li class="list__item"><a href="https://platform.kata.academy/user/statistic" target="_blank" class="navi__link">Main</a></li>
+                    <li class="list__item"><a href="https://platform.kata.academy/user/courses/1" target="_blank" class="navi__link">Java Core</a></li>
+                    <li class="list__item"><a href="https://platform.kata.academy/user/courses/2" target="_blank" class="navi__link">Java pre-project</a></li>
+                    <li class="list__item"><a href="https://t.me/kata_academy" class="navi__link">Telegram</a></li>
+                </nav>
+            </div>
+        </section>
+    </header>
+
+    <div class="container">
+        <div class="welcome" sec:autorize="isAuthenticated()">
+            <span class="welcome__item" th:text="'-Welcome, '"/>
+            <span class="welcome__item" sec:authentication="name"/>
+            <span class="welcome__item">!</span>
+        </div>
+
+        <div class="info">
+            <h1 class="title">DataBase control v1.0</h1>
+            <p class="description"><span>>></span> this is database control v1.0</p>
+            <p class="description"><span>>></span> let tap any button for start to work</p>
+        </div>
+        <div class="buttons">
+            <div sec:authorize="isAuthenticated()">
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a class="link" href="/admin/data?name=" style="text-align: center; font-size: 24px">Database</a>
+                </div>
+                <div sec:authorize="hasAnyRole('USER')">
+                    <a class="link" href="/user/" style="text-align: center; font-size: 24px">My profile</a>
+                </div>
+                <form th:action="@{/logout}" th:method="POST">
+                    <button class="link logout__link" style="text-align: center; font-size: 24px" type="submit">Logout</button>
+                </form>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a class="link" href="/auth/login" style="text-align: center; font-size: 24px">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</body>
+</html>

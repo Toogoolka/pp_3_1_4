@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: bisque;
+            font-family: "Courier New",sans-serif;
+            font-size: 18px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form{
+            margin-top: 30px;
+            margin-bottom: 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            float: left;
+            width: 450px;
+            background-color: #eedfdf;
+
+            border: 2px solid #3b3b3b;
+            border-radius: 5px;
+        }
+        .field_place {
+            clear: both;
+            text-align: right;
+            line-height: 35px;
+        }
+        .header {
+            text-align: center;
+            margin: 22px 22px;
+        }
+
+
+        input {
+            padding: 6px 8px;
+            border: 1px solid darkgray;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+        input::placeholder {
+            color: darkgray;
+            font-style: italic;
+            font-family: "Courier New", sans-serif;
+        }
+        label {
+            float: left;
+            font-weight: 600;
+            padding-right: 12px ;
+        }
+
+        .btn__submit {
+            width: 100%;
+
+            text-transform: uppercase;
+            font-weight: bold;
+
+            cursor: pointer;
+            padding: 8px 20px;
+            background-color: rgba(152, 204, 98, 0.93);
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+
+            margin-bottom: 22px;
+        }
+        .btn__submit:hover{
+            background-color: #69a82c;
+        }
+
+        .errors {
+            position: relative;
+            margin-top: -15px;
+            color: #ce0000;
+            font-size: 0.7em;
+        }
+        .form__container {
+            width: 300px;
+        }
+        .link {
+            display: block;
+            padding: 7px 7px;
+            border:none;
+            border-radius: 3px;
+
+            background-color: rgba(204, 199, 98, 0.93);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .link:hover {
+            background-color: #69a82c;
+        }
+    </style>
+    <title>Create new user</title>
+</head>
+<body>
+    <div style="width: 450px; margin-top: 150px">
+        <a class="link" href="/admin/data?name=" style="text-align: center; font-size: 24px">back to database</a>
+    </div>
+    
+    <div class="form">
+        <h2 class="header table-header">Create new User</h2>
+        <form class="form__container" th:method="POST" th:action="@{/admin/new}" th:object="${user}">
+            <div class="field_place">
+                <label for="name">Name:</label>
+                <input type="text" th:field="*{username}" id="name" placeholder="German Sevostianov">
+                <p class="errors" th:if ="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</p>
+            </div>
+            <div class="field_place">
+                <label for="password">Password:</label>
+                <input type="password" th:field="*{password}" id="password">
+                <p class="errors" th:if ="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</p>
+            </div>
+            <div class="field_place">
+                <label for="age">Age:</label>
+                <input type="number" th:field="*{age}" id="age">
+                <p class="errors" th:if ="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</p>
+            </div>
+            <div class="field_place">
+                <label for="email">Email:</label>
+                <input type="text" th:field="*{email}" id="email" placeholder="german@kata.academy">
+                <p class="errors" th:if ="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</p>
+            </div>
+            <div class="sel__container">
+                <label>Select a Role: </label>
+                <select id="roles" name="roles">
+                    <option value="0">select role..</option>
+                    <option value="1">ADMIN</option>
+                    <option value="2">USER</option>
+                    </option>
+                </select>
+            </div>
+            <br>
+            <button class="btn__submit" type="submit">Create new user</button>
+        </form>
+    </div>
+
+
+</body>
+</html>
