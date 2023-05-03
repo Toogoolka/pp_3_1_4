@@ -16,14 +16,12 @@ import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService, RoleService, UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final RoleServiceImpl roleServiceImpl;
     private final UserRepository userRepository;
     @Autowired
-    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, RoleServiceImpl roleServiceImpl, UserRepository userRepository) {
+    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.roleServiceImpl = roleServiceImpl;
         this.userRepository = userRepository;
     }
 
@@ -42,25 +40,12 @@ public class UserServiceImpl implements UserService, RoleService, UserDetailsSer
     @Override
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            // ADD ROLE FOR NEW USER HERE
-        if (user.getRoles().size() == 0) {
-            user.setDefaultRole(roleServiceImpl.findRoleById(2L));
-        }
         userRepository.save(user);
     }
 
     @Transactional
     @Override
-    public void update(Long id, User updatedUser) {
-        updatedUser.setId(id);
-        User existingUser = findOne(id);
-        Set<Role> existingRoles = existingUser.getRoles();
-        Set<Role> updatedRoles = updatedUser.getRoles();
-        updatedUser.setPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
-        if(!existingRoles.containsAll(updatedRoles)) {
-            existingRoles.addAll(updatedRoles);
-        }
-        updatedUser.setRoles(existingRoles);
+    public void update(User updatedUser) {
         userRepository.save(updatedUser);
     }
 
@@ -71,8 +56,8 @@ public class UserServiceImpl implements UserService, RoleService, UserDetailsSer
     }
 
     @Override
-    public List<User> findAllByUsername(String name) {
-        return userRepository.findByUsernameContainsIgnoreCase(name);
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -80,25 +65,10 @@ public class UserServiceImpl implements UserService, RoleService, UserDetailsSer
         return userRepository.findByUsername(name).orElse(null );
     }
     @Override
-    public Role findRoleByName(String name) {
-        return roleServiceImpl.findRoleByName(name);
-    }
-
-    @Override
-    public Role findRoleById(Long id) {
-        return roleServiceImpl.findRoleById(id);
-    }
-
-    @Override
-    public List<Role> findAll() {
-        return roleServiceImpl.findAll();
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElse(null);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmailEqualsIgnoreCase(email).orElse(null);
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
+            throw new UsernameNotFoundException(String.format("User '%s' not found", email));
         }
         return user;
     }

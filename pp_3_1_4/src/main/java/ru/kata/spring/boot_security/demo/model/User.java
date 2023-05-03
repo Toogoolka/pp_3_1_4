@@ -9,10 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -22,24 +19,28 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "username", unique = true)
-    @NotEmpty(message = "*Name should not be empty")
+//    @NotEmpty(message = "*Name should not be empty")
     private String username;
+
+    @Column(name = "last_name")
+//    @NotEmpty(message = "*Last name should not be empty")
+    private String lastName;
     @Column(name = "age")
-    @Min(value = 0, message = "*Age is incorrect")
+//    @Min(value = 0, message = "*Age is incorrect")
     private int age;
     @Column(name = "email")
-    @Email(message = "*Enter correctly email (example@examp.org)")
+//    @Email(message = "*Enter correctly email (example@examp.org)")
     private String email;
 
     @Column(name = "password")
-    @Size(min = 4, message = "Password should be min 4 characters")
+//    @Size(min = 4, message = "Password should be min 4 characters")
     private String password;
 
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new TreeSet<>();
 
     public User(String username, int age, String email, String password) {
         this.username = username;
@@ -48,6 +49,13 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public User(String username, String lastName, int age, String email, String password) {
+        this.username = username;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
 
     public User() {
     }
@@ -73,6 +81,14 @@ public class User implements UserDetails {
         this.username = name;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public int getAge() {
         return age;
     }
@@ -91,6 +107,11 @@ public class User implements UserDetails {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+    public String getStringOfRoles() {
+        StringBuilder build = new StringBuilder();
+        roles.stream().forEach(role -> build.append(role.toString()).append(" "));
+        return build.toString();
     }
 
     public void setRoles(Set<Role> roles) {

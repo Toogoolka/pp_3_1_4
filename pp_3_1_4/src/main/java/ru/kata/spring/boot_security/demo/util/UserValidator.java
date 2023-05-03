@@ -29,7 +29,7 @@ public class UserValidator implements Validator {
     public void validate(Object target, Errors errors) {
         User user = (User) target;
         try {
-            userServiceImpl.loadUserByUsername(user.getUsername());
+            userServiceImpl.loadUserByUsername(user.getEmail());
         } catch (UsernameNotFoundException ignored){
             return; //пользователь не найден
         }

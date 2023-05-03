@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Home</title>
+</head>
+<body>
+<nav class="p-3 navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+  <div class="container">
+    <div>
+      <b><span class="text-white" th:text="${#authentication.getPrincipal().getEmail()}"/></b>
+      <span class="text-white">with roles: </span>
+      <span class="text-white" th:each="role : ${#authentication.getPrincipal().getRoles()}" th:text="${role.toString() + ' '}"></span>
+    </div>
+    <a href="/logout" class="text-light">Logout</a>
+  </div>
+</nav>
+<div class="p-4 container-fluid">
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        <ul class="nav nav-pills nav-fill flex-column">
+          <li class="nav-item text-left">
+            <a class="nav-link active" href="/admin/">Admin</a>
+          </li>
+          <li class="nav-item text-left">
+            <a class="nav-link" href="/user/">User</a>
+          </li>
+
+        </ul>
+      </div>
+      <div class="p-3 col bg-light">
+        <h1 class="mb-3">Admin panel</h1>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/data">Users table</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/new">New user</a>
+          </li>
+        </ul>
+        <div class="card">
+          <div class="card-header font-weight-bold">Add new user</div>
+          <div class="card-body align-items-center">
+            <div class="row justify-content-center">
+              <div class="col-6">
+                <form class="text-center" th:method="POST" th:action="@{/admin/new}" th:object="${user}">
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="name">Name:</label>
+                    <input class="form-control" type="text" th:field="*{username}" id="name" placeholder="German">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="lastName">Last name:</label>
+                    <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="Sevostianov">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="password">Password:</label>
+                    <input class="form-control" type="password" th:field="*{password}" id="password">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="age">Age:</label>
+                    <input class="form-control" type="number" th:field="*{age}" id="age">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="email">Email:</label>
+                    <input class="form-control" type="text" th:field="*{email}" id="email" placeholder="german@kata.academy">
+                  </div>
+                  <label class="font-weight-bold">Role: </label>
+                  <select multiple class="mb-3 custom-select" id="roles" name="roles">
+                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role}">any role</option>
+                  </select>
+                  <button class="btn btn-success" type="submit">Add new user</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

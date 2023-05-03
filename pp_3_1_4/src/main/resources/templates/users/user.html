@@ -158,8 +158,13 @@
     <form class="form__container" th:method="PATCH" th:action="@{/admin/users/{id}(id=${user.getId()})}" th:object="${user}">
       <div class="field_place">
         <label for="name">Name:</label>
-        <input type="text" th:field="*{username}" id="name" placeholder="German Sevostianov">
+        <input type="text" th:field="*{username}" id="name" placeholder="German">
         <p class="errors" th:if ="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</p>
+      </div>
+      <div class="field_place">
+        <label for="name">Last name:</label>
+        <input type="text" th:field="*{lastName}" id="lastName" placeholder="Sevostianov">
+        <p class="errors" th:if ="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</p>
       </div>
       <div class="field_place">
         <label for="password">Password:</label>
@@ -180,7 +185,7 @@
         <label>Select a Role: </label>
         <select id="roles" name="roles">
           <option value="0">select role..</option>
-          <option value="1">ADMIN</option>
+          <option value="1" >ADMIN</option>
           <option value="2">USER</option>
           </option>
         </select>
