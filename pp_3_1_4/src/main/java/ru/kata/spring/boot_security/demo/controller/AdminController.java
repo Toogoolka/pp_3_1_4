@@ -5,18 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -35,7 +30,7 @@ public class AdminController {
     @GetMapping()
     public String mainPage(Model model, Principal principal) {
         model.addAttribute("user", userService.findByUsername(principal.getName()));
-        return "about";
+        return "index";
     }
     @GetMapping("/data")
     public String show(Model model) {
@@ -60,14 +55,6 @@ public class AdminController {
         userService.save(user);
         return "redirect:/admin/data";
     }
-
-
-//    @GetMapping("/users/{id}")
-//    public String showOne(@PathVariable("id") Long id, Model model) {
-//        model.addAttribute("user", userService.findOne(id));
-//        model.addAttribute("roles",  roleService.findAll());
-//        return "editUser";
-//    }
 
     @PatchMapping("/users/{id}")
     public String update(@ModelAttribute("user") User user) {
